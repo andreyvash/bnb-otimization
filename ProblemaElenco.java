@@ -4,12 +4,12 @@ public class ProblemaElenco
 {
     private int id;
     private int custo;
-    private List<Integer> grupos;
+    private Set<Integer> grupos;
     private int numGrupos;
     private int numPersonagens;
     private List<Ator> candidatos;
 
-    public ProblemaElenco(int id, int custo, List<Integer> grupos, int numGrupos, int numPersonagens,
+    public ProblemaElenco(int id, int custo, Set<Integer> grupos, int numGrupos, int numPersonagens,
     List<Ator> candidatos) 
     {
         this.id = id;
@@ -36,11 +36,11 @@ public class ProblemaElenco
         this.custo = custo;
     }
 
-    public List<Integer> getGrupos() {
+    public Set<Integer> getGrupos() {
         return grupos;
     }
 
-    public void setGrupos(List<Integer> grupos) {
+    public void setGrupos(Set<Integer> grupos) {
         this.grupos = grupos;
     }
 
@@ -57,9 +57,9 @@ public class ProblemaElenco
         System.out.print(this.custo + " " + this.numGrupos);
         System.out.println();
 
-        for(int i = 0; i < this.numGrupos; i++)
+        for(Integer i : this.grupos)
         {
-            System.out.println(this.grupos.get(i));
+            System.out.println(i.intValue());
         }
     }
 

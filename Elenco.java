@@ -14,6 +14,14 @@ public class Elenco
         }
     }
 
+    public static void adicionaGrupos(Ator ator, Set<Integer> gruposDoNo)
+    {
+        for(Integer grupo: ator.getGrupos())
+        {
+            gruposDoNo.add(grupo);
+        }
+    }
+
     public static void criaEstrutura(List<Ator> atores, int numPersonagens, List<ProblemaElenco> problema)
     {
         for(int i = 0; i < atores.size(); i++)
@@ -23,7 +31,9 @@ public class Elenco
             atoresDoNo.add(ator);
             int numElencados = 1;
             ProblemaElenco instancia = new ProblemaElenco();
+            Set<Integer> gruposNo = new HashSet<>();
 
+            adicionaGrupos(ator, gruposNo);
             instancia.setNumPersonagens(numElencados);
 
             for(int j = 0; j < atores.size(); j++)
@@ -34,6 +44,7 @@ public class Elenco
                     {
                         ator = atores.get(j);
                         atoresDoNo.add(ator);
+                        adicionaGrupos(ator, gruposNo);
                         instancia.setNumPersonagens(instancia.getNumPersonagens()+1);
                     }
                     else if(j < atores.size())
@@ -41,7 +52,9 @@ public class Elenco
                         ator =  atores.get(i);
                         List<Ator> proximosFilhos = new ArrayList<>();
                         proximosFilhos.add(ator);
-                        
+                        Set<Integer> gruposSegundoNo = new HashSet<>();
+
+                        adicionaGrupos(ator, gruposSegundoNo);
                         ProblemaElenco proximosNo = new ProblemaElenco();
                         for(int k = j; k < atores.size(); k++)
                         {
@@ -51,20 +64,23 @@ public class Elenco
                                 {
                                     ator = atores.get(k);
                                     proximosFilhos.add(ator);
+                                    adicionaGrupos(ator, gruposSegundoNo);
                                 }
                             }
                         }
                         proximosNo.setCandidatos(proximosFilhos);
+                        proximosNo.setGrupos(gruposSegundoNo);
                         problema.add(proximosNo);
                     }
                 }
             }
 
+            instancia.setGrupos(gruposNo);
             instancia.setCandidatos(atoresDoNo);
             problema.add(instancia);
         }
     }
-
+    
 
     public static void main(String args[])
     {
@@ -120,8 +136,16 @@ public class Elenco
         for(ProblemaElenco p : problema)
         {
             for(Ator ator : p.getCandidatos())
+            {
                 ator.imprimeId();
-            System.out.println();
+            
+            }
+            System.out.print("(");
+            for(Integer grupo : p.getGrupos())
+            {
+                System.out.print(grupo.intValue() + ", ");
+            }    
+            System.out.println(")");
         }
     }
 }
