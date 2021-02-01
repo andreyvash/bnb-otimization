@@ -32,7 +32,7 @@ public class Elenco
             int numElencados = 1;
             ProblemaElenco instancia = new ProblemaElenco();
             Set<Integer> gruposNo = new HashSet<>();
-
+            instancia.setCusto(ator.getCusto());
             adicionaGrupos(ator, gruposNo);
             instancia.setNumPersonagens(numElencados);
 
@@ -45,6 +45,7 @@ public class Elenco
                         ator = atores.get(j);
                         atoresDoNo.add(ator);
                         adicionaGrupos(ator, gruposNo);
+                        instancia.setCusto(instancia.getCusto() + ator.getCusto());
                         instancia.setNumPersonagens(instancia.getNumPersonagens()+1);
                     }
                     else if(j < atores.size())
@@ -56,6 +57,7 @@ public class Elenco
 
                         adicionaGrupos(ator, gruposSegundoNo);
                         ProblemaElenco proximosNo = new ProblemaElenco();
+                        proximosNo.setCusto(ator.getCusto());
                         for(int k = j; k < atores.size(); k++)
                         {
                             if(i != k && atores.get(k).getCusto() >= proximosFilhos.get(0).getCusto())
@@ -64,6 +66,7 @@ public class Elenco
                                 {
                                     ator = atores.get(k);
                                     proximosFilhos.add(ator);
+                                    proximosNo.setCusto(proximosNo.getCusto() + ator.getCusto());
                                     adicionaGrupos(ator, gruposSegundoNo);
                                 }
                             }
@@ -145,7 +148,7 @@ public class Elenco
             {
                 System.out.print(grupo.intValue() + ", ");
             }    
-            System.out.println(")");
+            System.out.println(p.getCusto() + ")");
         }
     }
 }
