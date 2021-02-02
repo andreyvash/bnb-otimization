@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Elenco
 {
@@ -91,7 +93,7 @@ public class Elenco
         int numGrupos= sc.nextInt();  
         int numAtores= sc.nextInt();  
         int numPersonagens= sc.nextInt();
-        List<Integer> grupos = new ArrayList<>();
+        Set<Integer> grupos = new HashSet<>();
         List<Ator> atores = new ArrayList<>();
         
         StringBuilder stf = new StringBuilder();
@@ -107,7 +109,7 @@ public class Elenco
 
         for(int i = 0; i < numGrupos; i++)
         {
-            grupos.add(Integer.valueOf(i));
+            grupos.add(Integer.valueOf(i+1));
         }
 
         for(int i = 0; i < numAtores; i++)
@@ -136,13 +138,24 @@ public class Elenco
         List<ProblemaElenco> problema = new ArrayList<>();
         criaEstrutura(atores, numPersonagens, problema);
 
+        List<Ator> contratados = new ArrayList<>();
+        int custo = Integer.MAX_VALUE;
+
         for(ProblemaElenco p : problema)
         {
+
+            if (p.getCusto() < custo && grupos.equals(p.getGrupos()))
+            {
+                custo = p.getCusto();
+                contratados = p.getCandidatos();
+            }
+
             for(Ator ator : p.getCandidatos())
             {
                 ator.imprimeId();
             
             }
+
             System.out.print("(");
             for(Integer grupo : p.getGrupos())
             {
@@ -150,5 +163,31 @@ public class Elenco
             }    
             System.out.println(p.getCusto() + ")");
         }
+
+        if(contratados.isEmpty())
+        {
+            System.out.println("Inviavel");
+        }
+        else
+        {
+            int i = 0;
+            while(contratados.size() < numPersonagens)
+            {
+                if (!(contratados.contains(atores.get(i))))
+                {
+                    contratados.add(atores.get(i));
+                    custo += atores.get(i).getCusto();
+                }
+                i++;    
+            }
+            contratados.sort(Comparator.comparing(Ator::getId));
+            for(Ator ator : contratados)
+            {
+                System.out.print(ator.getId() + " ");
+            }
+            System.out.println();
+            System.out.println(custo);
+        }
+        
     }
 }
