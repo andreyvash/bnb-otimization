@@ -37,12 +37,12 @@ public class Elenco
             instancia.setCusto(ator.getCusto());
             adicionaGrupos(ator, gruposNo);
             instancia.setNumPersonagens(numElencados);
-
+            
             for(int j = 0; j < atores.size(); j++)
             {
-                if(i != j && atores.get(j).getCusto() >= atoresDoNo.get(0).getCusto())
+                if(i != j && !(gruposNo.containsAll(atores.get(j).getGrupos())))
                 {
-                    if(instancia.getNumPersonagens() < numPersonagens)
+                    if(instancia.getNumPersonagens() < numPersonagens )
                     {
                         ator = atores.get(j);
                         atoresDoNo.add(ator);
@@ -62,7 +62,7 @@ public class Elenco
                         proximosNo.setCusto(ator.getCusto());
                         for(int k = j; k < atores.size(); k++)
                         {
-                            if(i != k && atores.get(k).getCusto() >= proximosFilhos.get(0).getCusto())
+                            if(i != k && !(gruposSegundoNo.containsAll(atores.get(k).getGrupos())))
                             {
                                 if(proximosFilhos.size() < numPersonagens)
                                 {
@@ -133,7 +133,7 @@ public class Elenco
 
         // debugEntrada(numGrupos, numAtores, numPersonagens, atores);
         atores.sort(Comparator.comparing(Ator::getCusto));
-        // debugEntrada(numGrupos, numAtores, numPersonagens, atores);
+        debugEntrada(numGrupos, numAtores, numPersonagens, atores);
 
         List<ProblemaElenco> problema = new ArrayList<>();
         criaEstrutura(atores, numPersonagens, problema);
