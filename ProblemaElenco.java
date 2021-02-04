@@ -52,16 +52,6 @@ public class ProblemaElenco
         this.numGrupos = numGrupos;
     }
 
-    public void imprimeAtor()
-    {
-        System.out.print(this.custo + " " + this.numGrupos);
-        System.out.println();
-
-        for(Integer i : this.grupos)
-        {
-            System.out.println(i.intValue());
-        }
-    }
 
     public List<Ator> getCandidatos() {
         return candidatos;
