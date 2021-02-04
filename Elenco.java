@@ -166,6 +166,41 @@ public class Elenco
         }
     }
     
+    private static void criaArvore(List<Ator> atores, Set<Integer> grupos, int numPersonagens)
+    {
+        LinkedList<Node> stack = new LinkedList<>();
+
+        Node root = new Node(new HashSet<>(), new Ator(), Integer.MAX_VALUE, new ArrayList<>());
+
+        stack.add(root);
+        while(!stack.isEmpty())
+        {
+            Node node = stack.pollLast();
+            for(Ator ator : atores)
+            {
+                List<Node> filhos = new ArrayList<>();
+                Set<Integer> gruposNo = new HashSet<>();
+                gruposNo.addAll(ator.getGrupos());    
+                Node filho = new Node(gruposNo, ator, ator.getCusto(), new ArrayList<>());
+                filhos.add(filho);
+                List<Ator> atoresRestantes = atores.subList(atores.indexOf(ator), atores.indexOf(ator));
+                
+                for(Ator atorFilho : atoresRestantes)
+                {
+                    if(!(node.getGrupos().containsAll(atorFilho.getGrupos())))
+                    {   
+                        gruposNo.addAll(atorFilho.getGrupos());
+                        node.setGrupos(gruposNo);
+                        filho = new Node(gruposNo, atorFilho, filho.getCusto()+atorFilho.getCusto(), filhos);
+                        filhos.add(filho);
+                    }
+                    node.setFilhos(filhos);
+                }
+
+            }
+        }
+
+    }
     public static void main(String args[])
     {
         Scanner sc= new Scanner(System.in);    
