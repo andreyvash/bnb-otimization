@@ -105,7 +105,7 @@ public class Elenco
         }
     }
 
-    public static void criaEstrutura(List<Ator> atores, int numPersonagens, List<ProblemaElenco> problema)
+    public static void criaEstrutura(List<Ator> atores, int numPersonagens, List<ProblemaElenco> problema, Set<Integer> grupos)
     {
         for(int i = 0; i < atores.size(); i++)
         {
@@ -158,6 +158,14 @@ public class Elenco
                         problema.add(proximosNo);
                     }
                 }
+                else if (gruposNo.containsAll(grupos))
+                {
+                    instancia.setGrupos(gruposNo);
+                    instancia.setCandidatos(atoresDoNo);
+                    problema.add(instancia);
+                    return;
+                }
+                    
             }
 
             instancia.setGrupos(gruposNo);
@@ -224,8 +232,8 @@ public class Elenco
         atores.sort(Comparator.comparing(Ator::getCusto));
 
         List<ProblemaElenco> problema = new ArrayList<>();
-        criaEstrutura(atores, numPersonagens, problema);
-
+        criaEstrutura(atores, numPersonagens, problema, grupos);
+        imprimeEstrutura(problema);
         Solucao solucao = resolveProblema(atores, problema, grupos, numPersonagens);
         
         if(solucao != null)
