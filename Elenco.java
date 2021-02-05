@@ -4,7 +4,6 @@ import java.util.stream.Collectors;
 
 public class Elenco
 {
-
     private static void debugEntrada(int nGrupos, int nAtores, int nPersonagens, List<Ator> atores)
     {
         System.out.print(nGrupos + " " + nAtores + " " + nPersonagens);
@@ -42,6 +41,17 @@ public class Elenco
             }    
             System.out.println(p.getCusto() + ")");
         }
+    }
+
+    private static Long contaNos(List<ProblemaElenco> problemas)
+    {
+        Long cont = 0L;
+        for(ProblemaElenco p : problemas)
+        {
+            cont++;
+            cont += p.getCandidatos().size();
+        }
+        return cont;
     }
 
     private static void leEntrada(int numGrupos, int numAtores, int numPersonagens, Set<Integer> grupos, List<Ator> atores, Scanner sc)
@@ -111,8 +121,8 @@ public class Elenco
         {
             Ator ator =  atores.get(i);
             List<Ator> atoresDoNo = new ArrayList<>();
-            atoresDoNo.add(ator);
 
+            atoresDoNo.add(ator);
             ProblemaElenco instancia = new ProblemaElenco();
             Set<Integer> gruposNo = new HashSet<>();
             
@@ -209,7 +219,7 @@ public class Elenco
         }
 
     }
-    public static void main(String args[])
+    public static void main(String args[]) throws Exception
     {
         Scanner sc= new Scanner(System.in);    
         int numGrupos= sc.nextInt();  
@@ -217,7 +227,8 @@ public class Elenco
         int numPersonagens= sc.nextInt();
         Set<Integer> grupos = new HashSet<>();
         List<Ator> atores = new ArrayList<>();
-        
+        Long nosPercorridos;
+
         StringBuilder stf = new StringBuilder();
         for(int i = 0; i< args.length; i++)
         {
@@ -229,15 +240,23 @@ public class Elenco
             System.out.println("gay");
         }
         leEntrada(numGrupos, numAtores, numPersonagens, grupos, atores, sc);
-        atores.sort(Comparator.comparing(Ator::getCusto));
 
+        long start = System.currentTimeMillis();
+        atores.sort(Comparator.comparing(Ator::getCusto));
         List<ProblemaElenco> problema = new ArrayList<>();
         criaEstrutura(atores, numPersonagens, problema, grupos);
+        nosPercorridos = contaNos(problema);
         imprimeEstrutura(problema);
         Solucao solucao = resolveProblema(atores, problema, grupos, numPersonagens);
         
         if(solucao != null)
+        {
             solucao.imprime();
-        
+        }
+            
+        long time = System.currentTimeMillis() - start;
+        System.err.println("Tempo: " + time + "ms");
+        System.err.println("Nós da arvore: " + nosPercorridos);
+
     }
 }
