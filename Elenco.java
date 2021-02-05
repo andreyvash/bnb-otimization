@@ -115,7 +115,14 @@ public class Elenco
         }
     }
 
-    public static void criaEstrutura(List<Ator> atores, int numPersonagens, List<ProblemaElenco> problema, Set<Integer> grupos)
+    private static boolean isFuncaoPadrao(String funcaoLimit)
+    {
+        if("Padrao".equals(funcaoLimit))
+            return true;
+        return false;    
+    }
+
+    public static void criaEstrutura(List<Ator> atores, int numPersonagens, List<ProblemaElenco> problema, Set<Integer> grupos, String funcaoLimit)
     {
         for(int i = 0; i < atores.size(); i++)
         {
@@ -131,7 +138,9 @@ public class Elenco
             
             for(int j = 0; j < atores.size(); j++)
             {
-                if(i != j && !(gruposNo.containsAll(atores.get(j).getGrupos())))
+                // if(i != j && !(gruposNo.containsAll(atores.get(j).getGrupos())))
+                if(i != j && (instancia.getCusto() >= atores.get(j).getCusto() && !isFuncaoPadrao(funcaoLimit) ||
+                             (!(gruposNo.containsAll(atores.get(j).getGrupos()))) && isFuncaoPadrao(funcaoLimit)))
                 {
                     if(atoresDoNo.size() < numPersonagens )
                     {
@@ -152,7 +161,8 @@ public class Elenco
                         proximosNo.setCusto(ator.getCusto());
                         for(int k = j; k < atores.size(); k++)
                         {
-                            if(i != k && !(gruposSegundoNo.containsAll(atores.get(k).getGrupos())))
+                            // if(i != k && !(gruposSegundoNo.containsAll(atores.get(k).getGrupos())))
+                            if(i != k && (proximosNo.getCusto() >= atores.get(k).getCusto()))
                             {
                                 if(proximosFilhos.size() < numPersonagens)
                                 {
@@ -228,6 +238,7 @@ public class Elenco
         Set<Integer> grupos = new HashSet<>();
         List<Ator> atores = new ArrayList<>();
         Long nosPercorridos;
+        StringBuilder funcaoLimitante = new StringBuilder("Padrao");
 
         StringBuilder stf = new StringBuilder();
         for(int i = 0; i< args.length; i++)
@@ -237,14 +248,16 @@ public class Elenco
 
         if(stf.toString().contains("-a"))
         {
-            System.out.println("gay");
+            funcaoLimitante = new StringBuilder("Alternativa");;
         }
+
         leEntrada(numGrupos, numAtores, numPersonagens, grupos, atores, sc);
 
         long start = System.currentTimeMillis();
+
         atores.sort(Comparator.comparing(Ator::getCusto));
         List<ProblemaElenco> problema = new ArrayList<>();
-        criaEstrutura(atores, numPersonagens, problema, grupos);
+        criaEstrutura(atores, numPersonagens, problema, grupos, funcaoLimitante.toString());
         nosPercorridos = contaNos(problema);
         imprimeEstrutura(problema);
         Solucao solucao = resolveProblema(atores, problema, grupos, numPersonagens);
