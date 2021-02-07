@@ -117,9 +117,7 @@ public class Elenco
 
     private static boolean isFuncaoPadrao(String funcaoLimit)
     {
-        if("Padrao".equals(funcaoLimit))
-            return true;
-        return false;    
+        return "Padrao".equals(funcaoLimit) ? true : false;    
     }
 
     public static void criaEstrutura(List<Ator> atores, int numPersonagens, List<ProblemaElenco> problema, Set<Integer> grupos, String funcaoLimit)
@@ -138,7 +136,6 @@ public class Elenco
             
             for(int j = 0; j < atores.size(); j++)
             {
-                // if(i != j && !(gruposNo.containsAll(atores.get(j).getGrupos())))
                 if(i != j && (instancia.getCusto() >= atores.get(j).getCusto() && !isFuncaoPadrao(funcaoLimit) ||
                              (!(gruposNo.containsAll(atores.get(j).getGrupos()))) && isFuncaoPadrao(funcaoLimit)))
                 {
@@ -161,8 +158,8 @@ public class Elenco
                         proximosNo.setCusto(ator.getCusto());
                         for(int k = j; k < atores.size(); k++)
                         {
-                            // if(i != k && !(gruposSegundoNo.containsAll(atores.get(k).getGrupos())))
-                            if(i != k && (proximosNo.getCusto() >= atores.get(k).getCusto()))
+                            if(i != k && (proximosNo.getCusto() >= atores.get(k).getCusto() && !isFuncaoPadrao(funcaoLimit) ||
+                                        (!(gruposSegundoNo.containsAll(atores.get(k).getGrupos()))) && isFuncaoPadrao(funcaoLimit))) 
                             {
                                 if(proximosFilhos.size() < numPersonagens)
                                 {
@@ -178,13 +175,6 @@ public class Elenco
                         problema.add(proximosNo);
                     }
                 }
-                else if (gruposNo.containsAll(grupos))
-                {
-                    instancia.setGrupos(gruposNo);
-                    instancia.setCandidatos(atoresDoNo);
-                    problema.add(instancia);
-                    return;
-                }
                     
             }
 
@@ -193,42 +183,8 @@ public class Elenco
             problema.add(instancia);
         }
     }
+
     
-    private static void criaArvore(List<Ator> atores, Set<Integer> grupos, int numPersonagens)
-    {
-        LinkedList<Node> stack = new LinkedList<>();
-
-        Node root = new Node(new HashSet<>(), new Ator(), Integer.MAX_VALUE, new ArrayList<>());
-
-        stack.add(root);
-        while(!stack.isEmpty())
-        {
-            Node node = stack.pollLast();
-            for(Ator ator : atores)
-            {
-                List<Node> filhos = new ArrayList<>();
-                Set<Integer> gruposNo = new HashSet<>();
-                gruposNo.addAll(ator.getGrupos());    
-                Node filho = new Node(gruposNo, ator, ator.getCusto(), new ArrayList<>());
-                filhos.add(filho);
-                List<Ator> atoresRestantes = atores.subList(atores.indexOf(ator), atores.indexOf(ator));
-                
-                for(Ator atorFilho : atoresRestantes)
-                {
-                    if(!(node.getGrupos().containsAll(atorFilho.getGrupos())))
-                    {   
-                        gruposNo.addAll(atorFilho.getGrupos());
-                        node.setGrupos(gruposNo);
-                        filho = new Node(gruposNo, atorFilho, filho.getCusto()+atorFilho.getCusto(), filhos);
-                        filhos.add(filho);
-                    }
-                    node.setFilhos(filhos);
-                }
-
-            }
-        }
-
-    }
     public static void main(String args[]) throws Exception
     {
         Scanner sc= new Scanner(System.in);    
@@ -259,7 +215,6 @@ public class Elenco
         List<ProblemaElenco> problema = new ArrayList<>();
         criaEstrutura(atores, numPersonagens, problema, grupos, funcaoLimitante.toString());
         nosPercorridos = contaNos(problema);
-        imprimeEstrutura(problema);
         Solucao solucao = resolveProblema(atores, problema, grupos, numPersonagens);
         
         if(solucao != null)

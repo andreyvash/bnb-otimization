@@ -1,6 +1,5 @@
 JFLAGS = -g
 JC = javac
-# .DEFAULT_GOAL := elenco
 
 .SUFFIXES: .java .class
 .java.class:
