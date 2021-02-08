@@ -5,7 +5,6 @@ public class Ator
     private int id;
     private int custo;
     private List<Integer> grupos;
-    private int numGrupos;
 
     public int getId() {
         return id;
@@ -31,20 +30,12 @@ public class Ator
         this.grupos = grupos;
     }
 
-    public int getNumGrupos() {
-        return numGrupos;
-    }
-
-    public void setNumGrupos(int numGrupos) {
-        this.numGrupos = numGrupos;
-    }
-
     public void imprimeAtor()
     {
-        System.out.print(this.custo + " " + this.numGrupos);
+        System.out.print(this.custo + " " + this.grupos.size());
         System.out.println();
 
-        for(int i = 0; i < this.numGrupos; i++)
+        for(int i = 0; i < this.grupos.size(); i++)
         {
             System.out.println(this.grupos.get(i));
         }

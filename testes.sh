@@ -1,8 +1,8 @@
 #!/bin/bash
 
-input="1 2 3 4 5 6 7"
+input="1 2 3 4 5 6"
 
 for i in ${input[@]}
 do
-    ./elenco < exemplo$i.txt > saida$i.txt
+    ./elenco -a < exemplo$i.txt > saida$i.txt
 done

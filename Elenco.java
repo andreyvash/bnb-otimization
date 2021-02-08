@@ -48,13 +48,12 @@ public class Elenco
         Long cont = 0L;
         for(ProblemaElenco p : problemas)
         {
-            cont++;
             cont += p.getCandidatos().size();
         }
         return cont;
     }
 
-    private static void leEntrada(int numGrupos, int numAtores, int numPersonagens, Set<Integer> grupos, List<Ator> atores, Scanner sc)
+    private static void leEntrada(int numGrupos, int numAtores, Set<Integer> grupos, List<Ator> atores, Scanner sc)
     {
         for(int i = 0; i < numGrupos; i++)
         {
@@ -64,12 +63,13 @@ public class Elenco
         for(int i = 0; i < numAtores; i++)
         {
             Ator ator = new Ator();
+            int numGruposAtor = 0;
             ator.setId(i+1);
             ator.setCusto(sc.nextInt());
-            ator.setNumGrupos(sc.nextInt());
+            numGruposAtor = sc.nextInt();
             List<Integer> gruposAtor = new ArrayList<>();
 
-            for(int j = 0; j < ator.getNumGrupos(); j++)
+            for(int j = 0; j < numGruposAtor; j++)
             {
                 gruposAtor.add(Integer.valueOf(sc.nextInt()));
             }
@@ -207,7 +207,7 @@ public class Elenco
             funcaoLimitante = new StringBuilder("Alternativa");;
         }
 
-        leEntrada(numGrupos, numAtores, numPersonagens, grupos, atores, sc);
+        leEntrada(numGrupos, numAtores, grupos, atores, sc);
 
         long start = System.currentTimeMillis();
 
